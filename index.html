@@ -15,12 +15,13 @@
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react-dom.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 </head>
 <body>
   <div id="content"></div>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script>
     var socket = io();
+    var el = React.createElement.bind(React);
     var Chat = React.createClass({
       getInitialState: function() {
         return {messages: []};
@@ -37,27 +38,23 @@
         this.state.messages.push(message);
         this.setState({messages: this.state.messages});
       },
-      chatMessage: function(message) {
-        this.state.messages.push(message);
-        this.setState({messages: messages});
-      },
       render: function() {
         return (
-          React.createElement('div', {},
-            React.createElement('ul', {id: 'message-container'},
+          el('div', {},
+            el('ul', {id: 'message-container'},
               this.state.messages.map(function(message, i) {
-                return React.createElement('li', {key: i}, message);
+                return el('li', {key: i}, message);
               }, this)
             ),
-            React.createElement('form', {onSubmit: this.sendMessage}, 
-              React.createElement('input', {id: 'm', autoFocus: true, ref: 'messageBox'}),
-              React.createElement('button', {type: 'submit'}, 'Send')
+            el('form', {onSubmit: this.sendMessage}, 
+              el('input', {id: 'm', autoFocus: true, autoComplete: 'off', ref: 'messageBox'}),
+              el('button', {type: 'submit'}, 'Send')
             )
           )
         );
       }
     });
-    ReactDOM.render(React.createElement(Chat), document.getElementById('content'));
+    ReactDOM.render(el(Chat), document.getElementById('content'));
   </script>
 </body>
 </html>
